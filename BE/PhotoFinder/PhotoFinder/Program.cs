@@ -70,6 +70,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowAllOrigins");
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
