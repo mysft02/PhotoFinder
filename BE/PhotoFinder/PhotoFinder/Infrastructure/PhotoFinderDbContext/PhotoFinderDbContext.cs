@@ -8,6 +8,7 @@ namespace PhotoFinder.Infrastructure.Database
         public PhotoFinderDbContext(DbContextOptions<PhotoFinderDbContext> options) : base(options) { }
 
         public DbSet<users> Users { get; set; }
+        public DbSet<photographers> Photographers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,6 +35,17 @@ namespace PhotoFinder.Infrastructure.Database
                 entity.Property(e => e.profile_picture).IsRequired(false);
                 entity.Property(e => e.created_at).IsRequired();
                 entity.Property(e => e.updated_at).IsRequired();
+            });
+
+            modelBuilder.Entity<photographers>(entity =>
+            {
+                entity.HasKey(e => e.photographer_id);
+                entity.HasOne(e => e.User).WithMany().HasForeignKey(e => e.user_id).OnDelete(DeleteBehavior.NoAction);
+                entity.Property(e => e.bio).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.portfolio_url).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.rating);
+                entity.Property(e => e.location).HasMaxLength(255);
+                entity.Property(e => e.created_at).IsRequired();
             });
         }
     }

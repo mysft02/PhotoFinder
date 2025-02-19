@@ -89,6 +89,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IPhotographerService, PhotographerService>();
 builder.Services.AddScoped<JwtService>();
 
 builder.Services.AddControllersWithViews()
