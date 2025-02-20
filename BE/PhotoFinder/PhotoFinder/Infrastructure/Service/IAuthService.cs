@@ -4,6 +4,7 @@ using PhotoFinder.Entity;
 using System.Security.Claims;
 using PhotoFinder.Infrastructure.Database;
 using PhotoFinder.DTO.User;
+using PhotoFinder.DTO.Photographer;
 
 namespace PhotoFinder.Infrastructure.Service
 {
@@ -44,48 +45,25 @@ namespace PhotoFinder.Infrastructure.Service
                 createdUser.email = userRegisterDTO.Email;
                 createdUser.password = BCrypt.Net.BCrypt.HashPassword(userRegisterDTO.Password);
                 createdUser.role = userRegisterDTO.Role;
-
-                //var check = true;
-
-                //while (check)
-                //{
-                //    var id = _jwtService.GenerateId();
-                //    var checkId = _context.Users.FirstOrDefault(x => x.user_id == id);
-                //    if (checkId == null)
-                //    {
-                //        createdUser.user_id = id;
-                //        check = false;
-                //    }
-                //}
-
                 createdUser.created_at = DateTime.Now;
                 createdUser.updated_at = DateTime.Now;
 
                 _context.Users.Add(createdUser);
+                await _context.SaveChangesAsync();
 
-                //if (createdUser.Role == "Photographer")
-                //{
-                //    var createdTherapist = new Photographer
-                //    {
-                //        UserId = createdUser.Id,
-                //        CreatedAt = DateTime.Now,
-                //    };
+                if (createdUser.role == "photographer")
+                {
+                    var photographer = new photographers
+                    {
+                        user_id = createdUser.user_id,
+                        bio = "",
+                        portfolio_url = "",
+                        location = "",
+                        created_at = DateTime.Now
+                    };
 
-                //    var checkPhoto = true;
-
-                //    while (checkPhoto)
-                //    {
-                //        var id = Guid.NewGuid();
-                //        var checkId = _context.Photographers.FirstOrDefault(x => x.PhotographerId == id);
-                //        if (checkId == null)
-                //        {
-                //            createdTherapist.PhotographerId = id;
-                //            checkPhoto = false;
-                //        }
-                //    }
-
-                //    _context.Photographers.Add(createdTherapist);
-                //}
+                    _context.Photographers.Add(photographer);
+                }
 
                 await _context.SaveChangesAsync();
 

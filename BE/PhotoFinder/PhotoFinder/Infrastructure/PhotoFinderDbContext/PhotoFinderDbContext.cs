@@ -51,8 +51,8 @@ namespace PhotoFinder.Infrastructure.Database
             {
                 entity.HasKey(e => e.photographer_id);
                 entity.HasOne(e => e.User).WithMany().HasForeignKey(e => e.user_id).OnDelete(DeleteBehavior.NoAction);
-                entity.Property(e => e.bio).IsRequired().HasMaxLength(255);
-                entity.Property(e => e.portfolio_url).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.bio).HasMaxLength(255);
+                entity.Property(e => e.portfolio_url).HasMaxLength(255);
                 entity.Property(e => e.rating);
                 entity.Property(e => e.location).HasMaxLength(255);
                 entity.Property(e => e.created_at).IsRequired();

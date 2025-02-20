@@ -7,7 +7,7 @@ namespace PhotoFinder.Infrastructure.Service
 {
     public interface IPhotographerService
     {
-        Task<IActionResult> HandleCreatePhotographer(PhotographerCreateDTO photographerCreateDTO, string? userId);
+        //Task<IActionResult> HandleCreatePhotographer(PhotographerCreateDTO photographerCreateDTO, string? userId);
         Task<IActionResult> HandleGetAllPhotographers();
         Task<IActionResult> HandleGetPhotographerById(int id);
         Task<IActionResult> HandleUpdatePhotographer(PhotographerUpdateDTO photographerUpdateDTO, string? userId);
@@ -64,32 +64,36 @@ namespace PhotoFinder.Infrastructure.Service
             catch (Exception ex) { return BadRequest(ex.Message); }
         }
 
-        public async Task<IActionResult> HandleCreatePhotographer(PhotographerCreateDTO photographerCreateDTO, string? userId)
-        {
-            try
-            {
-                var photographer = new photographers
-                {
-                    user_id = photographerCreateDTO.UserId,
-                    bio = photographerCreateDTO.Bio,
-                    portfolio_url = photographerCreateDTO.PortfolioUrl,
-                    location = photographerCreateDTO.Location,
-                    created_at = DateTime.Now
-                };
+        //public async Task<IActionResult> HandleCreatePhotographer(PhotographerCreateDTO photographerCreateDTO, string? userId)
+        //{
+        //    try
+        //    {
+        //        var photographer = new photographers
+        //        {
+        //            user_id = photographerCreateDTO.UserId,
+        //            bio = photographerCreateDTO.Bio,
+        //            portfolio_url = photographerCreateDTO.PortfolioUrl,
+        //            location = photographerCreateDTO.Location,
+        //            created_at = DateTime.Now
+        //        };
 
-                _context.Photographers.Add(photographer);
-                var result = _context.SaveChanges();
-                if (result > 0)
-                {
-                    return Ok(photographer);
-                }
-                else
-                {
-                    return BadRequest("Create failed");
-                }
-            }
-            catch (Exception ex) { return BadRequest(ex.Message); }
-        }
+        //        var user = _context.Users.FirstOrDefault(x => x.user_id == photographerCreateDTO.UserId);
+
+        //        if(user.role != "photographer") { return BadRequest("User is not photographer"); }
+
+        //        _context.Photographers.Add(photographer);
+        //        var result = _context.SaveChanges();
+        //        if (result > 0)
+        //        {
+        //            return Ok(photographer);
+        //        }
+        //        else
+        //        {
+        //            return BadRequest("Create failed");
+        //        }
+        //    }
+        //    catch (Exception ex) { return BadRequest(ex.Message); }
+        //}
 
         public async Task<IActionResult> HandleUpdatePhotographer(PhotographerUpdateDTO photographerUpdateDTO, string? userId)
         {
