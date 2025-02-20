@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PhotoFinder.DTO.Photographer;
 using PhotoFinder.Entity;
-using PhotoFinder.Infrastructure.Database;
+
 
 namespace PhotoFinder.Infrastructure.Service
 {
@@ -15,9 +15,9 @@ namespace PhotoFinder.Infrastructure.Service
 
     public class PhotographerService : ControllerBase, IPhotographerService
     {
-        private readonly PhotoFinderDbContext _context;
+        private readonly PhotoFinderContext _context;
 
-        public PhotographerService(PhotoFinderDbContext context)
+        public PhotographerService(PhotoFinderContext context)
         {
             _context = context;
         }
@@ -29,12 +29,12 @@ namespace PhotoFinder.Infrastructure.Service
                 List<PhotographerDTO> photographers = new List<PhotographerDTO>();
                 photographers = _context.Photographers
                     .Select(x => new PhotographerDTO{
-                        PhotographerId = x.photographer_id,
-                        UserId = x.user_id,
-                        Bio = x.bio,
-                        PortfolioUrl = x.portfolio_url,
-                        Rating = x.rating,
-                        Location = x.location,
+                        PhotographerId = x.PhotographerId,
+                        UserId = x.UserId,
+                        Bio = x.Bio,
+                        PortfolioUrl = x.PortfolioUrl,
+                        Rating = (double)x.Rating,
+                        Location = x.Location,
                     })
                     .ToList();
                 
@@ -50,12 +50,12 @@ namespace PhotoFinder.Infrastructure.Service
                 var photographer = _context.Photographers
                     .Select(x => new PhotographerDTO
                     {
-                        PhotographerId = x.photographer_id,
-                        UserId = x.user_id,
-                        Bio = x.bio,
-                        PortfolioUrl = x.portfolio_url,
-                        Rating = x.rating,
-                        Location = x.location,
+                        PhotographerId = x.PhotographerId,
+                        UserId = x.UserId,
+                        Bio = x.Bio,
+                        PortfolioUrl = x.PortfolioUrl,
+                        Rating = (double)x.Rating,
+                        Location = x.Location,
                     })
                     .FirstOrDefault(x => x.PhotographerId == id);
 
@@ -101,12 +101,12 @@ namespace PhotoFinder.Infrastructure.Service
             {
                 var photographerQuery = _context.Photographers.AsQueryable();
 
-                var photographer = photographerQuery.FirstOrDefault(x => x.photographer_id == photographerUpdateDTO.PhotographerId);
+                var photographer = photographerQuery.FirstOrDefault(x => x.PhotographerId == photographerUpdateDTO.PhotographerId);
 
-                photographer.bio = photographerUpdateDTO.Bio;
-                photographer.portfolio_url = photographerUpdateDTO.PortfolioUrl;
-                photographer.rating = photographerUpdateDTO.Rating;
-                photographer.location = photographerUpdateDTO.Location;
+                photographer.Bio = photographerUpdateDTO.Bio;
+                photographer.PortfolioUrl = photographerUpdateDTO.PortfolioUrl;
+                photographer.Rating = photographerUpdateDTO.Rating;
+                photographer.Location = photographerUpdateDTO.Location;
 
                 _context.Photographers.Update(photographer);
                 var result = _context.SaveChanges();

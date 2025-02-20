@@ -5,17 +5,17 @@ using System.Collections.Generic;
 
 namespace PhotoFinder.Entity;
 
-public partial class Availability
+public partial class Photo
 {
-    public int AvailabilityId { get; set; }
+    public int PhotoId { get; set; }
 
     public int PhotographerId { get; set; }
 
-    public DateOnly Date { get; set; }
+    public string PhotoUrl { get; set; }
 
-    public TimeOnly StartTime { get; set; }
+    public bool? IsPublic { get; set; }
 
-    public TimeOnly EndTime { get; set; }
+    public DateTime? UploadedAt { get; set; }
 
     public virtual Photographer Photographer { get; set; }
 }
