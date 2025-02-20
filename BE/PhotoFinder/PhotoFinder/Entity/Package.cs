@@ -5,17 +5,21 @@ using System.Collections.Generic;
 
 namespace PhotoFinder.Entity;
 
-public partial class Availability
+public partial class Package
 {
-    public int AvailabilityId { get; set; }
+    public int PackageId { get; set; }
 
     public int PhotographerId { get; set; }
 
-    public DateOnly Date { get; set; }
+    public string PackageName { get; set; }
 
-    public TimeOnly StartTime { get; set; }
+    public string Description { get; set; }
 
-    public TimeOnly EndTime { get; set; }
+    public decimal Price { get; set; }
+
+    public int Duration { get; set; }
+
+    public DateTime? CreatedAt { get; set; }
 
     public virtual Photographer Photographer { get; set; }
 }
