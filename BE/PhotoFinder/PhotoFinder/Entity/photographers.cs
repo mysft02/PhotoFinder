@@ -10,5 +10,10 @@
         public string location { get; set; }
         public users User { get; set; }
         public DateTime created_at { get; set; }
+        public List<packages> packages { get; set; }
+        public List<bookings> bookings { get; set; }
+        public List<availability> availabilities { get; set; }
+        public List<conversations> conversations { get; set; }
+        public List<photos> photos { get; set; }
     }
 }
