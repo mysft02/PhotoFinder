@@ -2,7 +2,7 @@
 using PhotoFinder.DTO.Package;
 using PhotoFinder.DTO.Photographer;
 using PhotoFinder.Entity;
-using PhotoFinder.Infrastructure.Database;
+using PhotoFinder.Infrastructure;
 
 namespace PhotoFinder.Infrastructure.Service
 {
@@ -16,9 +16,9 @@ namespace PhotoFinder.Infrastructure.Service
 
     public class PackageService : ControllerBase, IPackageService
     {
-        private readonly PhotoFinderDbContext _context;
+        private readonly PhotoFinderContext _context;
 
-        public PackageService(PhotoFinderDbContext context)
+        public PackageService(PhotoFinderContext context)
         {
             _context = context;
         }
@@ -31,13 +31,13 @@ namespace PhotoFinder.Infrastructure.Service
                 packages = _context.Packages
                     .Select(x => new PackageDTO
                     {
-                        package_id = x.package_id,
-                        photographer_id = x.photographer_id,
-                        package_name = x.package_name,
-                        description = x.description,
-                        price = x.price,
-                        created_at = x.created_at,
-                        duration = x.duration,
+                        PackageId = x.PackageId,
+                        PhotographerId = x.PhotographerId,
+                        PackageName = x.PackageName,
+                        Description = x.Description,
+                        Price = x.Price,
+                        CreatedAt = x.CreatedAt,
+                        Duration = x.Duration,
                     })
                     .ToList();
 
@@ -53,15 +53,15 @@ namespace PhotoFinder.Infrastructure.Service
                 var package = _context.Packages
                     .Select(x => new PackageDTO
                     {
-                        package_id = x.package_id,
-                        photographer_id = x.photographer_id,
-                        package_name = x.package_name,
-                        description = x.description,
-                        price = x.price,
-                        created_at = x.created_at,
-                        duration = x.duration,
+                        PackageId = x.PackageId,
+                        PhotographerId = x.PhotographerId,
+                        PackageName = x.PackageName,
+                        Description = x.Description,
+                        Price = x.Price,
+                        CreatedAt = x.CreatedAt,
+                        Duration = x.Duration,
                     })
-                    .FirstOrDefault(x => x.package_id == id);
+                    .FirstOrDefault(x => x.PackageId == id);
 
                 return Ok(package);
             }
@@ -72,14 +72,14 @@ namespace PhotoFinder.Infrastructure.Service
         {
             try
             {
-                var package = new packages
+                var package = new Package
                 {
-                    photographer_id = packageCreateDTO.photographer_id,
-                    package_name = packageCreateDTO.package_name,
-                    description = packageCreateDTO.description,
-                    price = packageCreateDTO.price,
-                    created_at = DateTime.Now,
-                    duration = packageCreateDTO.duration
+                    PhotographerId = packageCreateDTO.PhotographerId,
+                    PackageName = packageCreateDTO.PackageName,
+                    Description = packageCreateDTO.Description,
+                    Price = packageCreateDTO.Price,
+                    CreatedAt = DateTime.Now,
+                    Duration = packageCreateDTO.Duration
                 };
 
                 _context.Packages.Add(package);
@@ -102,13 +102,13 @@ namespace PhotoFinder.Infrastructure.Service
             {
                 var packageQuery = _context.Packages.AsQueryable();
 
-                var package = packageQuery.FirstOrDefault(x => x.package_id == packageUpdateDTO.package_id);
+                var package = packageQuery.FirstOrDefault(x => x.PackageId == packageUpdateDTO.PackageId);
 
-                package.photographer_id = packageUpdateDTO.photographer_id;
-                package.package_name = packageUpdateDTO.package_name;
-                package.description = packageUpdateDTO.description;
-                package.price = packageUpdateDTO.price;
-                package.duration = packageUpdateDTO.duration;
+                package.PhotographerId = packageUpdateDTO.PhotographerId;
+                package.PackageName = packageUpdateDTO.PackageName;
+                package.Description = packageUpdateDTO.Description;
+                package.Price = packageUpdateDTO.Price;
+                package.Duration = packageUpdateDTO.Duration;
 
                 _context.Packages.Update(package);
                 var result = _context.SaveChanges();

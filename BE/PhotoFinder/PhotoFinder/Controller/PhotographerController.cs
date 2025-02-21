@@ -48,7 +48,7 @@ namespace PhotoFinder.Controller
         public async Task<IActionResult> UpdatePhotographer([FromBody] PhotographerUpdateDTO photographerUpdateDTO)
         {
             var currentUser = HttpContext.User;
-            var userId = currentUser.FindFirst(ClaimTypes.Sid)?.Value;
+            var userId = currentUser.FindFirst("UserId")?.Value;
 
             return await _photographerService.HandleUpdatePhotographer(photographerUpdateDTO, userId);
         }

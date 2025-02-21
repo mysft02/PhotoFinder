@@ -39,7 +39,7 @@ namespace PhotoFinder.Controller
         public async Task<IActionResult> CreatePackage([FromBody] PackageCreateDTO packageCreateDTO)
         {
             var currentUser = HttpContext.User;
-            var userId = currentUser.FindFirst(ClaimTypes.Sid)?.Value;
+            var userId = currentUser.FindFirst("UserId")?.Value;
 
             return await _packageService.HandleCreatePackage(packageCreateDTO, userId);
         }
@@ -49,7 +49,7 @@ namespace PhotoFinder.Controller
         public async Task<IActionResult> UpdatePackage([FromBody] PackageUpdateDTO packageUpdateDTO)
         {
             var currentUser = HttpContext.User;
-            var userId = currentUser.FindFirst(ClaimTypes.Sid)?.Value;
+            var userId = currentUser.FindFirst("UserId")?.Value;
 
             return await _packageService.HandleUpdatePackage(packageUpdateDTO, userId);
         }

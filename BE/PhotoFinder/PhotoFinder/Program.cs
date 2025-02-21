@@ -2,11 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
-using PhotoFinder.Infrastructure.Database;
 using PhotoFinder.Infrastructure.Service;
 using System.Text;
 using System.Text.Json.Serialization;
 using PhotoFinder.Infrastructure.BearerAuthen;
+using PhotoFinder.Entity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +43,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddDbContext<PhotoFinderDbContext>(options =>
+builder.Services.AddDbContext<PhotoFinderContext>(options =>
 {
     Console.WriteLine($"Using ConnectionString: {builder.Configuration.GetConnectionString("DatabaseConnection")}");
     options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection"));
