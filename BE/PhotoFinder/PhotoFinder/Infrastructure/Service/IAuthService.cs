@@ -80,7 +80,7 @@ namespace PhotoFinder.Infrastructure.Service
             {
                 var loginUser = _context.Users.FirstOrDefault(x => x.Email == userLoginDTO.Email);
 
-                if (loginUser == null || !BCrypt.Net.BCrypt.Verify(userLoginDTO.Password, loginUser.password))
+                if (loginUser == null || !BCrypt.Net.BCrypt.Verify(userLoginDTO.Password, loginUser.Password))
                 {
                     return Unauthorized("Invalid username or password");
                 }

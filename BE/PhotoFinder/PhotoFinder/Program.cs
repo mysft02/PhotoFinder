@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using PhotoFinder.Infrastructure.BearerAuthen;
 using PhotoFinder.Entity;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +49,13 @@ builder.Services.AddDbContext<PhotoFinderContext>(options =>
     Console.WriteLine($"Using ConnectionString: {builder.Configuration.GetConnectionString("DatabaseConnection")}");
     options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection"));
 });
+
+builder.Services.AddSingleton(new JsonSerializerOptions
+{
+    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    WriteIndented = true
+});
+
 
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpContextAccessor();
@@ -91,6 +99,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPhotographerService, PhotographerService>();
 builder.Services.AddScoped<IPackageService, PackageService>();
+builder.Services.AddScoped<IAvailabilityService, AvailabilityService>();
 builder.Services.AddScoped<JwtService>();
 
 builder.Services.AddControllersWithViews()

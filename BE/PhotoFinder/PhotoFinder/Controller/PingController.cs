@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PhotoFinder.Infrastructure.Database;
+using PhotoFinder.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using PhotoFinder.Entity;
 
 namespace PhotoFinder.Controller
 {
@@ -13,9 +14,9 @@ namespace PhotoFinder.Controller
     {
         private readonly IConfiguration _config;
         private readonly ILogger<PingController> _logger;
-        private readonly PhotoFinderDbContext _dbContext;
+        private readonly PhotoFinderContext _dbContext;
 
-        public PingController(IConfiguration config, ILogger<PingController> logger, PhotoFinderDbContext dbContext)
+        public PingController(IConfiguration config, ILogger<PingController> logger, PhotoFinderContext dbContext)
         {
             _config = config;
             _logger = logger;
