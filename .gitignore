@@ -398,3 +398,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/BE/PhotoFinder/PhotoFinder/appsettings.json
+/BE/PhotoFinder/PhotoFinder/PhotoFinder.csproj
+/BE/PhotoFinder/PhotoFinder/appsettings.json

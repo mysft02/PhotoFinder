@@ -1,8 +1,12 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using System.Formats.Asn1;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace PhotoFinder.Infrastructure.Service
 {
@@ -54,5 +58,9 @@ namespace PhotoFinder.Infrastructure.Service
 
             return randomInt;
         }
+
+
     }
+
+    
 }

@@ -2,8 +2,9 @@
 using Microsoft.Extensions.Caching.Memory;
 using PhotoFinder.Entity;
 using System.Security.Claims;
-using PhotoFinder.Infrastructure.Database;
+using PhotoFinder.Infrastructure;
 using PhotoFinder.DTO.User;
+using PhotoFinder.DTO.Photographer;
 
 namespace PhotoFinder.Infrastructure.Service
 {
@@ -15,13 +16,13 @@ namespace PhotoFinder.Infrastructure.Service
 
     public class AuthService : ControllerBase, IAuthService
     {
-        private readonly PhotoFinderDbContext _context;
+        private readonly PhotoFinderContext _context;
         private readonly IConfiguration _config;
         private readonly JwtService _jwtService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMemoryCache _cache;
 
-        public AuthService(PhotoFinderDbContext context, IMemoryCache cache, IConfiguration config, JwtService jwtService, IHttpContextAccessor httpContextAccessor)
+        public AuthService(PhotoFinderContext context, IMemoryCache cache, IConfiguration config, JwtService jwtService, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _config = config;
@@ -33,59 +34,37 @@ namespace PhotoFinder.Infrastructure.Service
         {
             try
             {
-                var createdUser = new users();
+                var createdUser = new User();
 
-                var userDuplicate = _context.Users.FirstOrDefault(x => x.email == userRegisterDTO.Email);
+                var userDuplicate = _context.Users.FirstOrDefault(x => x.Email == userRegisterDTO.Email);
 
                 if (userDuplicate != null) { return BadRequest("Email already exists"); }
 
-                createdUser.name = userRegisterDTO.Username;
-                createdUser.phone_number = userRegisterDTO.Phone;
-                createdUser.email = userRegisterDTO.Email;
-                createdUser.password = BCrypt.Net.BCrypt.HashPassword(userRegisterDTO.Password);
-                createdUser.role = userRegisterDTO.Role;
-
-                //var check = true;
-
-                //while (check)
-                //{
-                //    var id = _jwtService.GenerateId();
-                //    var checkId = _context.Users.FirstOrDefault(x => x.user_id == id);
-                //    if (checkId == null)
-                //    {
-                //        createdUser.user_id = id;
-                //        check = false;
-                //    }
-                //}
-
-                createdUser.created_at = DateTime.Now;
-                createdUser.updated_at = DateTime.Now;
+                createdUser.Name = userRegisterDTO.Username;
+                createdUser.PhoneNumber = userRegisterDTO.Phone;
+                createdUser.Email = userRegisterDTO.Email;
+                createdUser.Password = BCrypt.Net.BCrypt.HashPassword(userRegisterDTO.Password);
+                createdUser.Role = userRegisterDTO.Role;
+                createdUser.CreatedAt = DateTime.Now;
+                createdUser.UpdatedAt = DateTime.Now;
 
                 _context.Users.Add(createdUser);
+                await _context.SaveChangesAsync();
 
-                //if (createdUser.Role == "Photographer")
-                //{
-                //    var createdTherapist = new Photographer
-                //    {
-                //        UserId = createdUser.Id,
-                //        CreatedAt = DateTime.Now,
-                //    };
+                if (createdUser.Role == "photographer")
+                {
+                    var photographer = new Photographer
+                    {
+                        UserId = createdUser.UserId,
+                        Bio = "",
+                        PortfolioUrl = "",
+                        Rating = 0,
+                        Location = "",
+                        CreatedAt = DateTime.Now
+                    };
 
-                //    var checkPhoto = true;
-
-                //    while (checkPhoto)
-                //    {
-                //        var id = Guid.NewGuid();
-                //        var checkId = _context.Photographers.FirstOrDefault(x => x.PhotographerId == id);
-                //        if (checkId == null)
-                //        {
-                //            createdTherapist.PhotographerId = id;
-                //            checkPhoto = false;
-                //        }
-                //    }
-
-                //    _context.Photographers.Add(createdTherapist);
-                //}
+                    _context.Photographers.Add(photographer);
+                }
 
                 await _context.SaveChangesAsync();
 
@@ -99,20 +78,18 @@ namespace PhotoFinder.Infrastructure.Service
         {
             try
             {
-                var loginUser = _context.Users.FirstOrDefault(x => x.email == userLoginDTO.Email);
+                var loginUser = _context.Users.FirstOrDefault(x => x.Email == userLoginDTO.Email);
 
-                if (loginUser == null || !BCrypt.Net.BCrypt.Verify(userLoginDTO.Password, loginUser.password))
+                if (loginUser == null || !BCrypt.Net.BCrypt.Verify(userLoginDTO.Password, loginUser.Password))
                 {
                     return Unauthorized("Invalid username or password");
                 }
 
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Sid, loginUser.user_id.ToString()),
-                    new Claim(ClaimTypes.NameIdentifier, loginUser.name),
-                    new Claim(ClaimTypes.Email, loginUser.email),
-                    new Claim(ClaimTypes.MobilePhone, loginUser.phone_number),
-                    new Claim(ClaimTypes.Role, loginUser.role.ToString())
+                    new Claim("UserId", loginUser.UserId.ToString()),
+                    new Claim("Email", loginUser.Email),
+                    new Claim("Role", loginUser.Role)
                 };
 
                 // Tạo access token

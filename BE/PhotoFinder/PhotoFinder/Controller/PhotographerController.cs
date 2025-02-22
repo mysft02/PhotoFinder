@@ -33,22 +33,22 @@ namespace PhotoFinder.Controller
             return await _photographerService.HandleGetPhotographerById(id);
         }
 
-        [Authorize]
-        [HttpPost("Create_Photographer")]
-        public async Task<IActionResult> CreatePhotographer([FromBody] PhotographerCreateDTO photographerCreateDTO)
-        {
-            var currentUser = HttpContext.User;
-            var userId = currentUser.FindFirst(ClaimTypes.Sid)?.Value;
+        //[Authorize]
+        //[HttpPost("Create_Photographer")]
+        //public async Task<IActionResult> CreatePhotographer([FromBody] PhotographerCreateDTO photographerCreateDTO)
+        //{
+        //    var currentUser = HttpContext.User;
+        //    var userId = currentUser.FindFirst(ClaimTypes.Sid)?.Value;
 
-            return await _photographerService.HandleCreatePhotographer(photographerCreateDTO, userId);
-        }
+        //    return await _photographerService.HandleCreatePhotographer(photographerCreateDTO, userId);
+        //}
 
         [Authorize]
         [HttpPost("Update_Photographer")]
         public async Task<IActionResult> UpdatePhotographer([FromBody] PhotographerUpdateDTO photographerUpdateDTO)
         {
             var currentUser = HttpContext.User;
-            var userId = currentUser.FindFirst(ClaimTypes.Sid)?.Value;
+            var userId = currentUser.FindFirst("UserId")?.Value;
 
             return await _photographerService.HandleUpdatePhotographer(photographerUpdateDTO, userId);
         }
