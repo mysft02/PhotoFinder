@@ -100,6 +100,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPhotographerService, PhotographerService>();
 builder.Services.AddScoped<IPackageService, PackageService>();
 builder.Services.AddScoped<IAvailabilityService, AvailabilityService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IVNPayService, VnPayService>();
 builder.Services.AddScoped<JwtService>();
 
