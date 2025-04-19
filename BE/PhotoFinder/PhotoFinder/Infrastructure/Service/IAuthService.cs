@@ -5,6 +5,7 @@ using System.Security.Claims;
 using PhotoFinder.Infrastructure;
 using PhotoFinder.DTO.User;
 using PhotoFinder.DTO.Photographer;
+using Microsoft.EntityFrameworkCore;
 
 namespace PhotoFinder.Infrastructure.Service
 {
@@ -12,6 +13,7 @@ namespace PhotoFinder.Infrastructure.Service
     {
         Task<IActionResult> HandleLogin(UserLoginDTO userLoginDTO);
         Task<IActionResult> HandleRegister(UserRegisterDTO userRegisterDTO);
+        Task<IActionResult> HandleGetProfile(string userId);
     }
 
     public class AuthService : ControllerBase, IAuthService
@@ -120,6 +122,24 @@ namespace PhotoFinder.Infrastructure.Service
                 return Ok(user);
             }
             catch (Exception ex) { return BadRequest(ex.Message); }
+        }
+
+        public async Task<IActionResult> HandleGetProfile(string userId)
+        {
+            try
+            {
+                var user = _context.Users
+                    .Include(x => x.Photographer)
+                    .FirstOrDefault(x => x.UserId == int.Parse(userId));
+                return Ok(user);
+            }
+            catch (Exception ex) { return BadRequest(ex.Message); }
+        }
+
+        public class ProfileResp
+        {
+            public User user { get; set; }
+            public Photographer photographer { get; set; }
         }
     }
 }

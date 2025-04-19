@@ -6,7 +6,8 @@ namespace PhotoFinder.Infrastructure.Service
 {
     public interface IDashboardService
     {
-        public Task<IActionResult> HandleGetBooking();
+        public Task<IActionResult> HandleGetUserBookingAnalytics(int userId);
+        public Task<IActionResult> HandleGetPhotographerBookingAnalytics(int userId);
     }
 
     public class DashboardService : ControllerBase, IDashboardService
@@ -18,15 +19,36 @@ namespace PhotoFinder.Infrastructure.Service
             _context = context;
         }
 
-        public async Task<IActionResult> HandleGetBooking()
+        public async Task<IActionResult> HandleGetUserBookingAnalytics(int userId)
         {
             var bookingQuery = _context.Bookings.AsQueryable();
 
             var bookingAna = bookingQuery
+                .Where(x => x.CustomerId == userId)
                 .GroupBy(x => (x.UpdatedAt).Value.Month)
                 .ToDictionary(g => g.Key, g => g.Count());
 
             var incomeAna = bookingQuery
+                .Where(x => x.CustomerId == userId)
+                .GroupBy(x => (x.UpdatedAt).Value.Month)
+                .ToDictionary(g => g.Key, g => g.Sum(x => x.TotalPrice));
+
+            var result = new AnalyticDTO { bookingAna = bookingAna, incomeAna = incomeAna };
+
+            return Ok(result);
+        }
+
+        public async Task<IActionResult> HandleGetPhotographerBookingAnalytics(int userId)
+        {
+            var bookingQuery = _context.Bookings.AsQueryable();
+
+            var bookingAna = bookingQuery
+                .Where(x => x.PhotographerId == userId)
+                .GroupBy(x => (x.UpdatedAt).Value.Month)
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            var incomeAna = bookingQuery
+                .Where(x => x.PhotographerId == userId)
                 .GroupBy(x => (x.UpdatedAt).Value.Month)
                 .ToDictionary(g => g.Key, g => g.Sum(x => x.TotalPrice));
 

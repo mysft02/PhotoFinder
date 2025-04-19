@@ -34,5 +34,16 @@ namespace PhotoFinder.Controller
         {
             return await _authService.HandleRegister(userRegisterDTO);
         }
+
+        [Authorize]
+        [HttpPost("Get_Profile")]
+        public async Task<IActionResult> GetProfile()
+        {
+
+            var currentUser = HttpContext.User;
+            var userId = currentUser.FindFirst("UserId")?.Value;
+
+            return await _authService.HandleGetProfile(userId);
+        }
     }
 }

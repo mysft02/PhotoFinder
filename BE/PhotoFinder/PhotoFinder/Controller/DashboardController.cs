@@ -17,11 +17,24 @@ namespace PhotoFinder.Controller
             _dashboardService = dashboardService;
         }
 
-        [HttpGet("Get_Booking")]
-        public async Task<IActionResult> GetBooking()
+        [Authorize]
+        [HttpGet("Get_User_Booking_Analytics")]
+        public async Task<IActionResult> GetUserBookingAnalytics()
         {
+            var currentUser = HttpContext.User;
+            var userId = currentUser.FindFirst("UserId")?.Value;
 
-            return await _dashboardService.HandleGetBooking();
+            return await _dashboardService.HandleGetUserBookingAnalytics(int.Parse(userId));
+        }
+
+        [Authorize]
+        [HttpGet("Get_Photographer_Booking_Analytics")]
+        public async Task<IActionResult> GetPhotographerBookingAnalytics()
+        {
+            var currentUser = HttpContext.User;
+            var userId = currentUser.FindFirst("UserId")?.Value;
+
+            return await _dashboardService.HandleGetPhotographerBookingAnalytics(int.Parse(userId));
         }
     }
 }
