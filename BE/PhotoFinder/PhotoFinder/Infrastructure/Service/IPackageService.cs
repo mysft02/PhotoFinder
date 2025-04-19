@@ -12,6 +12,7 @@ namespace PhotoFinder.Infrastructure.Service
         Task<IActionResult> HandleGetAllPackages();
         Task<IActionResult> HandleGetPackageById(int id);
         Task<IActionResult> HandleUpdatePackage(PackageUpdateDTO packageUpdateDTO, string? userId);
+        Task<IActionResult> HandleGetPackageByPhotographerId(int photographerId);
     }
 
     public class PackageService : ControllerBase, IPackageService
@@ -120,6 +121,29 @@ namespace PhotoFinder.Infrastructure.Service
                 {
                     return BadRequest("Update failed");
                 }
+            }
+            catch (Exception ex) { return BadRequest(ex.Message); }
+        }
+
+        public async Task<IActionResult> HandleGetPackageByPhotographerId(int photographerId)
+        {
+            try
+            {
+                List<PackageDTO> packages = _context.Packages
+         .Where(x => x.PhotographerId == photographerId) // Filter packages by photographerId first
+         .Select(x => new PackageDTO
+         {
+             PackageId = x.PackageId,
+             PhotographerId = x.PhotographerId,
+             PackageName = x.PackageName,
+             Description = x.Description,
+             Price = x.Price,
+             CreatedAt = x.CreatedAt,
+             Duration = x.Duration,
+         })
+         .ToList(); // Then project to DTO and convert to a list
+
+                return Ok(packages);
             }
             catch (Exception ex) { return BadRequest(ex.Message); }
         }

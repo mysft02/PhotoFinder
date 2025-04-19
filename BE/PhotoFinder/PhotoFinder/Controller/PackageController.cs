@@ -53,5 +53,12 @@ namespace PhotoFinder.Controller
 
             return await _packageService.HandleUpdatePackage(packageUpdateDTO, userId);
         }
+
+        [HttpGet("Get_Package_By_photographerId")]
+        public async Task<IActionResult> GetPackaGetPackageByPhotographerIdgeById([FromQuery] int id)
+        {
+
+            return await _packageService.HandleGetPackageByPhotographerId(id);
+        }
     }
 }
