@@ -153,7 +153,7 @@ namespace PhotoFinder.Infrastructure.Service
                 }
 
                 // 4. Return the User
-                return Ok(userId);
+                return Ok(user);
             }
             catch (Exception ex)
             {

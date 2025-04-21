@@ -44,26 +44,26 @@ namespace PhotoFinder.Controllers // Correct namespace
                 return BadRequest(ModelState); // Handle validation errors
             }
             // Get the user's ID.
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return await _bookingService.HandleCreateBooking(createBookingDTO, userId);
+            
+            return await _bookingService.HandleCreateBooking(createBookingDTO);
         }
 
         // PUT: api/bookings/{id}
-        [HttpPut("{id}")]
-      //  [Authorize] // Requires the user to be authenticated
-        public async Task<IActionResult> UpdateBooking(int id, [FromBody] UpdateBookingDTO updateBookingDTO)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState); // Handle validation errors
-            }
-            if (id != updateBookingDTO.BookingId)
-            {
-                return BadRequest("ID mismatch"); // Ensure the ID in the route matches the ID in the DTO
-            }
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return await _bookingService.HandleUpdateBooking(updateBookingDTO, userId);
-        }
+      //  [HttpPut("{id}")]
+      ////  [Authorize] // Requires the user to be authenticated
+      //  public async Task<IActionResult> UpdateBooking(int id, [FromBody] UpdateBookingDTO updateBookingDTO)
+      //  {
+      //      if (!ModelState.IsValid)
+      //      {
+      //          return BadRequest(ModelState); // Handle validation errors
+      //      }
+      //      if (id != updateBookingDTO.BookingId)
+      //      {
+      //          return BadRequest("ID mismatch"); // Ensure the ID in the route matches the ID in the DTO
+      //      }
+      //      var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+      //      return await _bookingService.HandleUpdateBooking(updateBookingDTO, userId);
+      //  }
 
         // DELETE: api/bookings/{id}
         [HttpDelete("{id}")]

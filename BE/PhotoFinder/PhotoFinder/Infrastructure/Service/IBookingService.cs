@@ -25,10 +25,10 @@ namespace PhotoFinder.Infrastructure.Service
 
     public interface IBookingService
     {
-        Task<IActionResult> HandleCreateBooking(CreateBookingDTO createBookingDTO, string? userId);
+        Task<IActionResult> HandleCreateBooking(CreateBookingDTO createBookingDTO);
         Task<IActionResult> HandleGetAllBookings();
         Task<IActionResult> HandleGetBookingById(int id);
-        Task<IActionResult> HandleUpdateBooking(UpdateBookingDTO updateBookingDTO, string? userId);
+        Task<IActionResult> HandleUpdateBooking(UpdateBookingDTO updateBookingDTO, int? userId);
         Task<IActionResult> HandleDeleteBooking(int id, string? userId);
         Task<IActionResult> HandleGetBookingsByUserId();
     }
@@ -109,7 +109,7 @@ namespace PhotoFinder.Infrastructure.Service
             }
         }
 
-        public async Task<IActionResult> HandleCreateBooking(CreateBookingDTO createBookingDTO, string? userId)
+        public async Task<IActionResult> HandleCreateBooking(CreateBookingDTO createBookingDTO)
         {
             try
             {
@@ -167,7 +167,7 @@ namespace PhotoFinder.Infrastructure.Service
             }
         }
 
-        public async Task<IActionResult> HandleUpdateBooking(UpdateBookingDTO updateBookingDTO, string? userId)
+        public async Task<IActionResult> HandleUpdateBooking(UpdateBookingDTO updateBookingDTO, int? userId)
         {
             try
             {
