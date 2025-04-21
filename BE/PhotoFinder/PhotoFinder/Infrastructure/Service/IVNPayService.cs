@@ -114,7 +114,7 @@ namespace PhotoFinder.Infrastructure.Service
 
                 _context.SaveChanges();
 
-                return Ok("Update Balance Success!");
+                return Ok("Payment success!");
             }
             catch (Exception ex)
             {
